@@ -143,8 +143,6 @@ function updateData(i) {
     });
 }
 
-// Search functionality
-let searchMood = 'title';
 function getsearch(id) {
     let search = document.getElementById('search');
     if (id == 'searchtitle') {
@@ -156,17 +154,19 @@ function getsearch(id) {
     }
 
     search.focus();
-    search.value=" ";
+    search.value = ""; // Clear search input properly
     display();
-
 }
+
 
 function searchdata(value) {
     let table = ''; // Initialize the table variable
+    let found = false; // Flag to check if any product is found
 
     if (searchMood == 'title') {
         for (let i = 0; i < datapro.length; i++) {
             if (datapro[i].title.includes(value.toLowerCase())) {
+                found = true;
                 table += `<tr>
                     <td>${i + 1}</td>
                     <td>${datapro[i].title}</td>
@@ -184,6 +184,7 @@ function searchdata(value) {
     } else {
         for (let i = 0; i < datapro.length; i++) {
             if (datapro[i].category.includes(value.toLowerCase())) {
+                found = true;
                 table += `<tr>
                     <td>${i + 1}</td>
                     <td>${datapro[i].title}</td>
@@ -198,6 +199,11 @@ function searchdata(value) {
                 </tr>`;
             }
         }
+    }
+
+    // If no product is found, display a message
+    if (!found) {
+        table = `<tr><td colspan="10">No products found</td></tr>`;
     }
 
     // Inject the search result into the table body
