@@ -31,14 +31,14 @@ let datapro = localStorage.product != null ? JSON.parse(localStorage.product) : 
 // On submit, create new product and add to array
 submit.onclick = function () {
     let newPro = {
-        title: title.value,
+        title: title.value.toLowerCase(),
         price: price.value,
         texes: texes.value,
         ads: ads.value,
         discount: discount.value,
         total: total.innerHTML,
         count: count.value,
-        category: category.value
+        category: category.value.toLowerCase(),
     };
 
     if (mode == 'create') {
@@ -142,25 +142,64 @@ function updateData(i) {
         behavior: 'smooth',
     });
 }
-let searchMood='title';
-function getsearch(id){
-    let search=document.getElementById('search');
-    if (id=='searchtitle') {
-        searchMood='title';
-        search.placeholder='search by title';
-    }else{
-        searchMood='category'
-        search.placeholder='search by category';
+
+// Search functionality
+let searchMood = 'title';
+function getsearch(id) {
+    let search = document.getElementById('search');
+    if (id == 'searchtitle') {
+        searchMood = 'title';
+        search.placeholder = 'Search by title';
+    } else {
+        searchMood = 'category';
+        search.placeholder = 'Search by category';
     }
 
-    search.focus()
+    search.focus();
+    search.value=" ";
+    display();
+
 }
 
-function searchdata(value){
-    if (searchMood=='title') {
+function searchdata(value) {
+    let table = ''; // Initialize the table variable
 
-    }else{
-        
+    if (searchMood == 'title') {
+        for (let i = 0; i < datapro.length; i++) {
+            if (datapro[i].title.includes(value.toLowerCase())) {
+                table += `<tr>
+                    <td>${i + 1}</td>
+                    <td>${datapro[i].title}</td>
+                    <td>${datapro[i].price}</td>
+                    <td>${datapro[i].texes}</td>
+                    <td>${datapro[i].ads}</td>
+                    <td>${datapro[i].discount}</td>
+                    <td>${datapro[i].total}</td>
+                    <td>${datapro[i].category}</td>
+                    <td><button onclick="updateData(${i})" id="update">Update</button></td>
+                    <td><button onclick="deleteData(${i})" id="delete">Delete</button></td>
+                </tr>`;
+            }
+        }
+    } else {
+        for (let i = 0; i < datapro.length; i++) {
+            if (datapro[i].category.includes(value.toLowerCase())) {
+                table += `<tr>
+                    <td>${i + 1}</td>
+                    <td>${datapro[i].title}</td>
+                    <td>${datapro[i].price}</td>
+                    <td>${datapro[i].texes}</td>
+                    <td>${datapro[i].ads}</td>
+                    <td>${datapro[i].discount}</td>
+                    <td>${datapro[i].total}</td>
+                    <td>${datapro[i].category}</td>
+                    <td><button onclick="updateData(${i})" id="update">Update</button></td>
+                    <td><button onclick="deleteData(${i})" id="delete">Delete</button></td>
+                </tr>`;
+            }
+        }
     }
 
+    // Inject the search result into the table body
+    tbody.innerHTML = table;
 }
